@@ -1,21 +1,31 @@
-let str: string = 'string!';
-let num: number = 10;
-let isTrue: boolean = true;
-let unknown: any = '1';
-unknown = true;
-let noName: string | number = 10;
-noName = 'apple';
+const myName: string = 'str';
+const myAge: number = 50;
 
-let numArray1: number[] = [1, 2, 3];
-let numArray2: Array<number> = [1, 2, 3];
+function getMyName(): string {
+  return myName;
+}
+
+function getMyAge(): number {
+  return myAge;
+}
+
+function getMyHeight(height: number, prefix: string = 'Height'): string {
+  return `${prefix}: ${height}`;
+}
+
+const consoleLog = (str: string): void => {
+  console.log(str);
+};
+
+let mySum: (a: number, b: number) => number;
+const sum = (num1: number, num2: number) => num1 + num2;
+mySum = sum;
+
+consoleLog('Test string');
+console.log(mySum(15, 5));
 
 
-let strArray1: string[] = ['1', '2', '3'];
-let strArray2: Array<string> = ['1', '2', '3'];
-
-let booArray1:boolean[] = [trrue, false];
-let booArray2:Array<boolean> = [trrue, false];
-
-// tuples
-let array1: [number, number, string] = [1, 2, '3'];
-let array2: [boolean,  string, number] = [true, 'str', 33];
+console.log(getMyName());
+console.log(getMyAge());
+console.log(getMyHeight(170, 'My height is'));
+console.log(getMyHeight(160));
