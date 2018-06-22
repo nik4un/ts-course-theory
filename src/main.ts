@@ -1,30 +1,53 @@
 class User {
-  /*
-  name: string; // если не указан тип, то по-умолчанию это public
-  public job: string;
-  */
-  public gender: string; // переменная доступна и внутри и снаружи
-  private IsTeacher: boolean; // доступна только внутри
-  protected age: number = 30; // то же, что и private, только переменной
-  // можно воспользоваться при расширении класса
+  private IsTeacher: boolean;
+  protected age: number = 30;
 
-  /*
-  constructor (theName: string, theJob: string) {
-    this.name = theName;
-    this.job = theJob;
-  }
-  */
-  // компактное задание конструктора (вместо закоментированных полей):
   constructor(public name: string, public job: string) {}
 
-  // private и protected переменные можно менять снаружи только посредством метода класса
-  increaseAge() {
-    console.log(`до: ${this.age}`);
-    this.age += 1;
+  public getAge(): string | number {
     return this.age;
   }
 }
-const user1 = new User('Gray', 'Aviator');
-console.log(user1);
 
-console.log(`после: ${user1.increaseAge()}`);
+class MySelf extends User {
+
+  constructor(job: string) {
+    super('Fred', job);
+    this.age = 65; // в дочернем классе мы имеем доступ к переменной protected
+    // а к переменной private нет
+  }
+
+  getAge(): string {
+    return `Hello, age is ${this.age}`;
+  }
+}
+const user = new User('Gray', 'Aviator');
+console.log(user);
+const mySelf = new MySelf('Proctologist')
+console.log(mySelf, mySelf.getAge());
+
+// абстрактные классы - это классы, от которых нелзя создавать экземпляры
+// от них можно только наследовать своего рода шаблон для дочерних классов
+abstract class Car {
+  model: string;
+  year: number = 2010;
+
+  // абстрактный метод - описание интерфейса метода, т.е. как он будет выглядеть
+  abstract logInfo(info: string): void;
+
+  getCarYear(): number {
+    return this.year;
+  }
+}
+
+class Ford extends Car {
+  logInfo(theInfo: string): void {
+    console.log(theInfo);
+  }
+}
+
+const car = new Ford;
+
+console.log(car);
+car.logInfo('red');
+console.log(car.getCarYear());
