@@ -1,30 +1,30 @@
-//тип "enum" служит в основном для задания констант
-enum Job {
-  Frontend,
-  Backend,
-  Designer = 50,
-  Manager
+class User {
+  /*
+  name: string; // если не указан тип, то по-умолчанию это public
+  public job: string;
+  */
+  public gender: string; // переменная доступна и внутри и снаружи
+  private IsTeacher: boolean; // доступна только внутри
+  protected age: number = 30; // то же, что и private, только переменной
+  // можно воспользоваться при расширении класса
+
+  /*
+  constructor (theName: string, theJob: string) {
+    this.name = theName;
+    this.job = theJob;
+  }
+  */
+  // компактное задание конструктора (вместо закоментированных полей):
+  constructor(public name: string, public job: string) {}
+
+  // private и protected переменные можно менять снаружи только посредством метода класса
+  increaseAge() {
+    console.log(`до: ${this.age}`);
+    this.age += 1;
+    return this.age;
+  }
 }
-const job1: Job = Job.Frontend;
-console.log(job1); // 0
-const job2: Job = Job.Backend;
-console.log(job2); // 1
-const job3: Job = Job.Designer;
-console.log(job3); // 50
-const job4: Job = Job.Manager;
-console.log(job4); // 51
+const user1 = new User('Gray', 'Aviator');
+console.log(user1);
 
-// тип "null"
-let myNum: number | null = 20;
-console.log(myNum);
-myNum = null;
-console.log(myNum);
-myNum = undefined;
-console.log(myNum);
-
-// для функций выбрасывающих ошибки, но ничего не возвращающих
-// придуман тип "never"
-const throwNewError = (err: string): never => {
-  throw new Error(err);
-};
-throwNewError('Ups!');
+console.log(`после: ${user1.increaseAge()}`);
