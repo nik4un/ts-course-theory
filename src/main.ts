@@ -1,53 +1,63 @@
-class User {
-  private IsTeacher: boolean;
-  protected age: number = 30;
-
-  constructor(public name: string, public job: string) {}
-
-  public getAge(): string | number {
-    return this.age;
-  }
+interface ILength  {
+  length: number; // здесь ставится не "," а ";"
 }
 
-class MySelf extends User {
+const getLength = (variable: {length: number}): void => { // такая запись означает,
+  // что передаваемый параметр д.б. объект, у которого должно обязательно присутствовать
+  // поле length
+  console.log(`getLength: ${variable.length}`);
+};
 
-  constructor(job: string) {
-    super('Fred', job);
-    this.age = 65; // в дочернем классе мы имеем доступ к переменной protected
-    // а к переменной private нет
+// предыдущую функцию можно переписать с помощью интерфейса
+const getLengthI = (variable: ILength): void => {
+  console.log(`getLengthI: ${variable.length}`);
+};
+
+getLength([1, 2, 3, 4, 5]);
+
+const box = {
+  name: 'Gray',
+  length: 20,
+};
+
+getLengthI(box);
+getLengthI([1, 2, 3, 4, 5]);
+
+interface IUser {
+  name: string;
+  age?: number; // необязательный параметр
+  logInfo(info: string) : void;
+}
+
+interface IGetYear {
+  getYear(): number;
+}
+
+const user: IUser = {
+  name: 'Tom',
+  age: 20,
+  logInfo(info) {
+    console.log(`Info: ${info}`);
   }
+};
 
-  getAge(): string {
-    return `Hello, age is ${this.age}`;
+// по интерфейсам также можно создавать и классы для этого
+// нужно имплементироваться от интерфейса или от нескольких
+// суть интерфейса в том, чтобы реализовать минимальное количество параметров
+class Man implements  IUser, IGetYear {
+  name: string = 'NoName';
+  // новые параметры могут присутствовать в любом количестве
+  job: string;
+  newAge: number;
+
+  logInfo(info: string) {
+    console.log(`Info: ${info}`);
+  }
+  getYear(): number  {
+    return 2010;
   }
 }
-const user = new User('Gray', 'Aviator');
+const man = new Man;
+
 console.log(user);
-const mySelf = new MySelf('Proctologist')
-console.log(mySelf, mySelf.getAge());
-
-// абстрактные классы - это классы, от которых нелзя создавать экземпляры
-// от них можно только наследовать своего рода шаблон для дочерних классов
-abstract class Car {
-  model: string;
-  year: number = 2010;
-
-  // абстрактный метод - описание интерфейса метода, т.е. как он будет выглядеть
-  abstract logInfo(info: string): void;
-
-  getCarYear(): number {
-    return this.year;
-  }
-}
-
-class Ford extends Car {
-  logInfo(theInfo: string): void {
-    console.log(theInfo);
-  }
-}
-
-const car = new Ford;
-
-console.log(car);
-car.logInfo('red');
-console.log(car.getCarYear());
+console.log(man);
