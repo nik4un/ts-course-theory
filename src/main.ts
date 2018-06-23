@@ -1,63 +1,35 @@
-interface ILength  {
-  length: number; // здесь ставится не "," а ";"
+// generic
+// благодаря такой записи TS в зависимости от типа данных, переданных в функцию
+// подставляет соответствующий переданным параметрам тип данных и может выдать ошибки на этапе компиляции
+//  см. log 2
+function genericGetter<T>(data: T): T {
+  return  data;
 }
 
-const getLength = (variable: {length: number}): void => { // такая запись означает,
-  // что передаваемый параметр д.б. объект, у которого должно обязательно присутствовать
-  // поле length
-  console.log(`getLength: ${variable.length}`);
-};
+console.log(genericGetter('Tom').length); // log1
+// console.log(genericGetter(100).length); // log2
 
-// предыдущую функцию можно переписать с помощью интерфейса
-const getLengthI = (variable: ILength): void => {
-  console.log(`getLengthI: ${variable.length}`);
-};
+// можно специально укказать generic какой тип данных будет использоваться:
+console.log(genericGetter<string>('Tom').length);
+console.log(genericGetter<number>(100).toFixed(2));
 
-getLength([1, 2, 3, 4, 5]);
+const arr: Array<number> = [1, 2, 3]; // такое объявление массива - это generic
+console.log(arr);
 
-const box = {
-  name: 'Gray',
-  length: 20,
-};
+const newGenericFunc: <T>(data: T) => T = genericGetter;
 
-getLengthI(box);
-getLengthI([1, 2, 3, 4, 5]);
+console.log(newGenericFunc<string>('Tom').length);
+console.log(newGenericFunc<number>(100).toFixed(2));
 
-interface IUser {
-  name: string;
-  age?: number; // необязательный параметр
-  logInfo(info: string) : void;
-}
+class Multiply<T extends number | string> { // указываем generic, что он можетнаследоваться от данного типа
+  constructor(private a: T, private b: T) {}
 
-interface IGetYear {
-  getYear(): number;
-}
-
-const user: IUser = {
-  name: 'Tom',
-  age: 20,
-  logInfo(info) {
-    console.log(`Info: ${info}`);
-  }
-};
-
-// по интерфейсам также можно создавать и классы для этого
-// нужно имплементироваться от интерфейса или от нескольких
-// суть интерфейса в том, чтобы реализовать минимальное количество параметров
-class Man implements  IUser, IGetYear {
-  name: string = 'NoName';
-  // новые параметры могут присутствовать в любом количестве
-  job: string;
-  newAge: number;
-
-  logInfo(info: string) {
-    console.log(`Info: ${info}`);
-  }
-  getYear(): number  {
-    return 2010;
+  public getResult(): number {
+    return +this.a * +this.b; // Number(this.a) * Number(this.b)
   }
 }
-const man = new Man;
+const mNum = new Multiply<number>(10, 5); // так же при создании экземпляра класса можно указать тип данных
+console.log('mNum: ', mNum.getResult());
 
-console.log(user);
-console.log(man);
+const mStr = new Multiply<string>('5', '12');
+console.log('mStr: ', mStr.getResult());
